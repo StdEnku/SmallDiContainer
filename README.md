@@ -67,6 +67,4 @@ $b =$container->resolve(B::class);
 
 $a->func(); // A
 $b->func(); // B
-
-echo "Hello, World!";
 ```
