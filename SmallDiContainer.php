@@ -118,13 +118,6 @@ class DiContainer {
         return $result;
     }
 
-    private function resolveSingleton(string $className) {
-        $result = $this->instances[$className];
-        if ($result === null) {
-            throw new \Exception("[内部エラー]$this->instances連想配列で存在しないキーが指定されました。");
-        }
-    }
-
     // 指定したクラス名のクラスのコンストラクタを解析し、依存関係を解決してインスタンス化する
     private function resolveFromConstructor(string $className) {
         $refClass = new \ReflectionClass($className);
