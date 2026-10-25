@@ -7,7 +7,7 @@ class A{
         echo "Aをコンストラクタで実体化\n";
     }
 
-    public function func() : void {
+    public function Func() : void {
         echo "Aのメソッド実行\n";
     }
 }
@@ -20,7 +20,7 @@ class B{
         $this->_a = $a;
     }
 
-    public function func() : void {
+    public function Func() : void {
         echo "Bのメソッド実行\n";
     }
 }
@@ -32,23 +32,23 @@ $aFactory = function(\SmallDiContainer\DiContainer $container) : A {
 
 $bFactory = function(\SmallDiContainer\DiContainer $container) : B {
     echo "Bをファクトリーメソッドで実体化\n";
-    $a = $container->resolve(A::class);
+    $a = $container->Resolve(A::class);
     return new B($a);
 };
 
-$container = \SmallDiContainer\DiContainer::getInstance();
+$container = \SmallDiContainer\DiContainer::GetInstance();
 
 // ファクトリーメソッドを登録する場合ture
-$container->register(A::class, true);
-$container->register(B::class, false, $bFactory);
+$container->Register(A::class, true);
+$container->Register(B::class, false, $bFactory);
 
-$a1 = $container->resolve(A::class);
-$b1 = $container->resolve(B::class);
-$a2 = $container->resolve(A::class);
-$b2 = $container->resolve(B::class);
+$a1 = $container->Resolve(A::class);
+$b1 = $container->Resolve(B::class);
+$a2 = $container->Resolve(A::class);
+$b2 = $container->Resolve(B::class);
 
-$a1->func(); // A
-$b1->func(); // B
+$a1->Func(); // A
+$b1->Func(); // B
 
 if ($a1 === $a2) {
     echo "a1とa2は同一オブジェクト\n";

@@ -14,7 +14,7 @@ DIコンテナの本質はクラスとファクトリーメソッドのリスト
 ## 主な機能
 
 1. **シングルトンパターンのコンテナ**
-   `DiContainer::getInstance()` を使用してアプリ全体で単一のコンテナインスタンスを共有できます。
+   `DiContainer::GetInstance()` を使用してアプリ全体で単一のコンテナインスタンスを共有できます。
 2. **自動依存関係解決 (Auto-Wiring)**
    コンストラクタの型ヒントをもとに、依存しているクラスを自動的に再帰解決します。
 3. **ファクトリー関数の登録**
@@ -28,22 +28,22 @@ DIコンテナの本質はクラスとファクトリーメソッドのリスト
 
 ### 1. コンテナの取得
 
-コンテナのインスタンスは `getInstance()` メソッドを通じて取得します。
+コンテナのインスタンスは `GetInstance()` メソッドを通じて取得します。
 
 ```php
 use SmallDiContainer\DiContainer;
 
-$container = DiContainer::getInstance();
+$container = DiContainer::GetInstance();
 ```
 
 ---
 
-### 2. クラスの登録 (`register`)
+### 2. クラスの登録 (`Register`)
 
-`register` メソッドを使用して、コンテナにクラスを登録します。
+`Register` メソッドを使用して、コンテナにクラスを登録します。
 
 ```php
-public function register(string $className, bool $isSingleton = false, ?\Closure $factory = null): void
+public function Register(string $className, bool $isSingleton = false, ?\Closure $factory = null): void
 ```
 
 #### 引数説明
@@ -53,12 +53,12 @@ public function register(string $className, bool $isSingleton = false, ?\Closure
 
 ---
 
-### 3. クラスの解決・取得 (`resolve`)
+### 3. クラスの解決・取得 (`Resolve`)
 
-`resolve` メソッドを使用して、登録されたクラスのインスタンスを取得します。
+`Resolve` メソッドを使用して、登録されたクラスのインスタンスを取得します。
 
 ```php
-$service = $container->resolve(UserService::class);
+$service = $container->Resolve(UserService::class);
 ```
 
 ---
@@ -89,14 +89,14 @@ class UserRepository {
     }
 }
 
-$container = DiContainer::getInstance();
+$container = DiContainer::GetInstance();
 
 // 依存される側のクラスと、依存する側のクラスの両方を登録
-$container->register(Logger::class);
-$container->register(UserRepository::class);
+$container->Register(Logger::class);
+$container->Register(UserRepository::class);
 
 // UserRepository を取得すると、内部で自動的に Logger が注入されます
-$userRepository = $container->resolve(UserRepository::class);
+$userRepository = $container->Resolve(UserRepository::class);
 $userRepository->find(1);
 ```
 
@@ -107,10 +107,10 @@ $userRepository->find(1);
 `$isSingleton` に `true` を指定することで、常に同じインスタンスを返すように設定できます。
 
 ```php
-$container->register(DatabaseConnection::class, true);
+$container->Register(DatabaseConnection::class, true);
 
-$db1 = $container->resolve(DatabaseConnection::class);
-$db2 = $container->resolve(DatabaseConnection::class);
+$db1 = $container->Resolve(DatabaseConnection::class);
+$db2 = $container->Resolve(DatabaseConnection::class);
 
 // $db1 と $db2 は完全に行一のインスタンスになります
 var_dump($db1 === $db2); // bool(true)
@@ -132,22 +132,22 @@ class ApiClient {
     public function __construct(public string $apiKey, public Logger $logger) {}
 }
 
-$container->register(Logger::class);
+$container->Register(Logger::class);
 
 // ファクトリー関数の登録例
-$container->register(
+$container->Register(
     ApiClient::class,
     false, // シングルトンフラグ
     function (DiContainer $c): ApiClient {
         // コンテナ経由で他の依存関係を取得可能
-        $logger = $c->resolve(Logger::class);
+        $logger = $c->Resolve(Logger::class);
         $apiKey = "SECRET_API_KEY_12345";
         
         return new ApiClient($apiKey, $logger);
     }
 );
 
-$apiClient = $container->resolve(ApiClient::class);
+$apiClient = $container->Resolve(ApiClient::class);
 ```
 
 ---
@@ -157,6 +157,6 @@ $apiClient = $container->resolve(ApiClient::class);
 以下のケースでは `\Exception` がスローされます。
 
 1. **未登録のクラスを参照した場合**
-   `resolve()` にコンテナへ登録されていないクラス名を渡した際。
+   `Resolve()` にコンテナへ登録されていないクラス名を渡した際。
 2. **ファクトリー関数のシグネチャ違反**
-   `register()` の際、ファクトリー関数の「引数の型・数」または「戻り値の型ヒント」が規則を満たしていない場合。
+   `Register()` の際、ファクトリー関数の「引数の型・数」または「戻り値の型ヒント」が規則を満たしていない場合。

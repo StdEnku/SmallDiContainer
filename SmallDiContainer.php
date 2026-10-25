@@ -30,7 +30,7 @@ class DiContainer {
     // #region シングルトン
     static private ?DiContainer $instance = null;
 
-    public static function getInstance(): self {
+    public static function GetInstance(): self {
         if (self::$instance === null) {
             self::$instance = new self();
         }
@@ -48,7 +48,7 @@ class DiContainer {
         $this->instances = [];
     }
 
-    public function register(string $className, bool $isSingleton = false, ?\Closure $factory = null): void {
+    public function Register(string $className, bool $isSingleton = false, ?\Closure $factory = null): void {
         // #region ファクトリー関数のシグネチャバリデーション
         if ($factory !== null) {
             $refFunc = new \ReflectionFunction($factory);
@@ -84,10 +84,10 @@ class DiContainer {
         $this->instances[$className] = null;
     }
 
-    public function resolve(string $className) {
+    public function Resolve(string $className) {
 
         $isExists = array_key_exists($className, $this->registry);
-        if ($isExists == false) throw new \Exception("登録されていないクラス名である{$className}が参照されました。");
+        if ($isExists === false) throw new \Exception("登録されていないクラス名である{$className}が参照されました。");
 
         if ($this-> registry[$className][self::SINGLETON_FLAG_INDEX] === true) {
             if ($this->instances[$className] == null) {
@@ -132,7 +132,7 @@ class DiContainer {
 
             foreach ($params as $param) {
             $paramClass = $param->getType()->getName();
-                $args[] = $this->resolve($paramClass);
+                $args[] = $this->Resolve($paramClass);
             }
 
             $result = $refClass->newInstanceArgs($args);
