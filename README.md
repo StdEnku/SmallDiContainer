@@ -69,3 +69,4 @@ $a->func(); // A
 $b->func(); // B
 
 echo "Hello, World!";
+```
