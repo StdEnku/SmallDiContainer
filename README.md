@@ -1,0 +1,2 @@
+# SmallDiContainer
+最小構成のリフレクションを利用したDIコンテナ
