@@ -42,11 +42,11 @@ class B {
 }
 
 // 1. カスタムファクトリーの定義
-$aFactory = function(\SmallDiContainer\DiContainer$container) : A {
+$aFactory = function(\SmallDiContainer\DiContainer $container) : A {
     return new A();
 };
 
-$bFactory = function(\SmallDiContainer\DiContainer$container) : B {
+$bFactory = function(\SmallDiContainer\DiContainer $container) : B {
     $a =$container->resolve(A::class);
     return new B($a);
 };
@@ -65,6 +65,7 @@ if (true) {
 $a =$container->resolve(A::class);
 $b =$container->resolve(B::class);
 
-$a->func(); // A$b->func(); // B
+$a->func(); // A
+$b->func(); // B
 
 echo "Hello, World!";
