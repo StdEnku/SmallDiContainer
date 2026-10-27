@@ -1,4 +1,5 @@
 # SmallDiContainer
+![mit](https://img.shields.io/badge/license-MIT-blue)
 最小構成のリフレクションを利用したDIコンテナ
 
 DIコンテナの本質はクラスとファクトリーメソッドのリストであり、本プロジェクトでは<br>
