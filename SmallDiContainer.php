@@ -71,7 +71,7 @@ class DiContainer {
             $isValid = $hasValidParam && $hasValidReturn;
 
             if (!$isValid) {
-                throw new \Exception("
+                throw new SmallDiContainerException("
                 登録しようとしているファクトリー関数のシグネチャは
                 - 引数が1つで、型ヒントが DiContainer であること
                 - 戻り値の型が指定されており、かつ登録する className と一致すること
@@ -87,7 +87,7 @@ class DiContainer {
     public function Resolve(string $className) {
 
         $isExists = array_key_exists($className, $this->registry);
-        if ($isExists === false) throw new \Exception("登録されていないクラス名である{$className}が参照されました。");
+        if ($isExists === false) throw new SmallDiContainerException("登録されていないクラス名である{$className}が参照されました。");
 
         if ($this-> registry[$className][self::SINGLETON_FLAG_INDEX] === true) {
             if ($this->instances[$className] == null) {
@@ -146,3 +146,5 @@ class DiContainer {
         return $factory($this);
     }
 }
+
+class SmallDiContainerException extends \Exception {}
